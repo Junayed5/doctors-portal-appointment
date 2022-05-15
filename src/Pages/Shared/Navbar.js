@@ -13,7 +13,7 @@ const Navbar = () => {
         <li><Link to="/appointment">Appointment</Link></li>
         <li><Link to="/review">Review</Link></li>
         <li><Link to="/contact">Contact us</Link></li>
-        {user ? <li onClick={() => signOut(auth)} className='flex items-center'>Sign Out</li> : <li><Link to="/login">Login</Link></li>}
+        {user ? <li onClick={() => signOut(auth)} className='flex items-center cursor-pointer'>Sign Out</li> : <li><Link to="/login">Login</Link></li>}
     </>
 
     return (

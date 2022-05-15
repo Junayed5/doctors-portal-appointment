@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCreateUserWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import auth from '../../firebase.init';
@@ -12,25 +12,27 @@ const SignUp = () => {
         user,
         loading,
         error,
-      ] = useCreateUserWithEmailAndPassword(auth);
+    ] = useCreateUserWithEmailAndPassword(auth);
+    const [updateProfile, updating, updateError] = useUpdateProfile(auth);
     const { register, formState: { errors }, handleSubmit } = useForm();
 
     let errorMSG;
 
-    if (user ||gUser) {
-        console.log(gUser);
+    if (user || gUser) {
+        console.log(gUser || user);
     }
-    if (error || gError) {
-        errorMSG = <p className='text-red-500'><small>{error.message || gError.message}</small></p>
+    if (error || gError || updateError) {
+        errorMSG = <p className='text-red-500'><small>{error?.message || gError?.message || updateError?.message}</small></p>
     }
-    if (loading || gLoading) {
-        return <Loading/>
+    if (loading || gLoading || updating) {
+        return <Loading />
     }
 
     // const { register, handleSubmit } = useForm();
-    const onSubmit = data => {
-        console.log(data);
-        createUserWithEmailAndPassword(data.email, data.password);
+    const onSubmit = async data => {
+        // console.log(data);
+        await createUserWithEmailAndPassword(data.email, data.password);
+        await updateProfile({ displayName:data.name });
     };
     return (
         <div className='flex h-screen justify-center items-center'>
@@ -50,7 +52,8 @@ const SignUp = () => {
                                     required: {
                                         value: true,
                                         message: 'Name is required'
-                                    },                                })}
+                                    },
+                                })}
                             />
                             <label className="label">
                                 {errors.name?.type === 'required' && <span className='text-red-700'>{errors.name.message}</span>}
@@ -105,7 +108,7 @@ const SignUp = () => {
                             </label>
                         </div>
                         {errorMSG}
-                        <input type="submit" className='btn  w-full max-w-xs' value='sign Up'/>
+                        <input type="submit" className='btn  w-full max-w-xs' value='sign Up' />
                     </form>
                     <p className='text-center'><small>Already Have An Account<Link to='/login' className='text-primary'>Please Login</Link></small></p>
                     <div className="divider">OR</div>
