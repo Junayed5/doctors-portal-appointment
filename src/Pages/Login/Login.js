@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import auth from '../../firebase.init';
+import useToken from '../../hook/useToken';
 import Loading from '../Shared/Loading';
 
 const Login = () => {
@@ -18,18 +19,20 @@ const Login = () => {
     let errorMSG;
     const navigate = useNavigate();
     const location = useLocation();
+    const [token] = useToken(user || gUser);
 
     const from = location.state?.from?.pathname || "/";
 
-    if (user ||gUser) {
-        console.log(gUser);
-        navigate(from, { replace: true });
-    }
+    useEffect(() => {
+        if (token) {
+            navigate(from, { replace: true });
+        }
+    }, [token,navigate,from])
     if (error || gError) {
         errorMSG = <p className='text-red-500'><small>{error.message || gError.message}</small></p>
     }
     if (loading || gLoading) {
-        return <Loading/>
+        return <Loading />
     }
 
     // const { register, handleSubmit } = useForm();
@@ -92,7 +95,7 @@ const Login = () => {
                             </label>
                         </div>
                         {errorMSG}
-                        <input type="submit" className='btn  w-full max-w-xs' value='Login'/>
+                        <input type="submit" className='btn  w-full max-w-xs' value='Login' />
                     </form>
                     <p className='text-center'><small>New To Doctors Portal <Link to='/signup' className='text-primary'>Create An Account</Link></small></p>
                     <div className="divider">OR</div>

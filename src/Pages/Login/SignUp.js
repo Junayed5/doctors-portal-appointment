@@ -1,26 +1,31 @@
 import React from 'react';
 import { useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import auth from '../../firebase.init';
+import useToken from '../../hook/useToken';
 import Loading from '../Shared/Loading';
 
 const SignUp = () => {
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
+    const navigate = useNavigate();
     const [
         createUserWithEmailAndPassword,
         user,
         loading,
         error,
-    ] = useCreateUserWithEmailAndPassword(auth,{sendEmailVerification:true});
+    ] = useCreateUserWithEmailAndPassword(auth,);
+    // {sendEmailVerification:true}
     const [updateProfile, updating, updateError] = useUpdateProfile(auth);
+    const [token] = useToken(user || gUser)
+
     const { register, formState: { errors }, handleSubmit } = useForm();
 
     let errorMSG;
 
-    if (user || gUser) {
-        console.log(gUser || user);
+    if (token) {
+        navigate('/appointment')
     }
     if (error || gError || updateError) {
         errorMSG = <p className='text-red-500'><small>{error?.message || gError?.message || updateError?.message}</small></p>

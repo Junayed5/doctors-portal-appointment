@@ -13,6 +13,8 @@ import SignUp from './Pages/Login/SignUp';
 import MainAppointment from './Pages/MainAppointment/MainAppointment';
 import Navbar from './Pages/Shared/Navbar';
 import 'react-toastify/dist/ReactToastify.css';
+import Users from './Pages/DashBoard/Users';
+import RequireAdmin from './Pages/DashBoard/RequireAdmin';
 
 function App() {
   return (
@@ -33,6 +35,7 @@ function App() {
         } >
           <Route index element={<MyAppointment/>}/>
           <Route path='review' element={<MyReview/>}/>
+          <Route path='users' element={<RequireAdmin><Users/></RequireAdmin>}/>
         </Route>
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<SignUp />} />

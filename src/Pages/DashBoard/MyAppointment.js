@@ -1,5 +1,7 @@
+import { signOut } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useNavigate } from 'react-router-dom';
 import auth from '../../firebase.init';
 
 const MyAppointment = () => {
@@ -7,10 +9,23 @@ const MyAppointment = () => {
     const [appointment, setAppointment] = useState([]);
     console.log(appointment);
     const [user] = useAuthState(auth);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:5000/booking?patientName=${user.email}`)
-            .then(res => res.json())
+        fetch(`http://localhost:5000/booking?patientName=${user.email}`,{
+            method:'GET',
+            headers:{
+                'authorization': `Barer ${localStorage?.getItem('accessToken')}`
+            }
+        })
+            .then(res => {
+                if (res.status === 401 || res.status === 403) {
+                    signOut(auth)
+                    localStorage.removeItem('accessToken');
+                    navigate('/home');
+                }
+                return res.json()
+            })
             .then(data => setAppointment(data));
     }, [])
     return (
@@ -29,7 +44,7 @@ const MyAppointment = () => {
                     </thead>
                     <tbody>
                         {
-                            appointment.map((a,index) => <tr key={a.treatmentId}>
+                            appointment?.map((a,index) => <tr key={a.treatmentId}>
                                 <th>{index + 1}</th>
                                 <td>{a.patient}</td>
                                 <td>{a.date}</td>
