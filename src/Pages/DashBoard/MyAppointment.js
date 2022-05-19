@@ -7,7 +7,6 @@ import auth from '../../firebase.init';
 const MyAppointment = () => {
 
     const [appointment, setAppointment] = useState([]);
-    console.log(appointment);
     const [user] = useAuthState(auth);
     const navigate = useNavigate();
 
@@ -31,7 +30,7 @@ const MyAppointment = () => {
     return (
         <div>
             <h3>My appointment{appointment.length}</h3>
-            <div classNam="overflow-x-auto">
+            <div className="overflow-x-auto">
                 <table className="table w-full">
                     <thead>
                         <tr>

@@ -15,6 +15,8 @@ import Navbar from './Pages/Shared/Navbar';
 import 'react-toastify/dist/ReactToastify.css';
 import Users from './Pages/DashBoard/Users';
 import RequireAdmin from './Pages/DashBoard/RequireAdmin';
+import AddDoctor from './Pages/DashBoard/AddDoctor';
+import ManageDoctor from './Pages/DashBoard/ManageDoctor';
 
 function App() {
   return (
@@ -35,7 +37,9 @@ function App() {
         } >
           <Route index element={<MyAppointment/>}/>
           <Route path='review' element={<MyReview/>}/>
-          <Route path='users' element={<RequireAdmin><Users/></RequireAdmin>}/>
+          <Route path='users' element={<RequireAdmin  ><Users/></RequireAdmin>}/>
+          <Route path='addDoctor' element={<RequireAdmin  ><AddDoctor/></RequireAdmin>}/>
+          <Route path='manageDoctor' element={<RequireAdmin  ><ManageDoctor/></RequireAdmin>}/>
         </Route>
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<SignUp />} />
